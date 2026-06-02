@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Snack Goblin</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-grid"></div>
+    
+    <div id="ui-layer">
+        <div id="score-display">0</div>
+        <div id="lives-display">❤️❤️❤️</div>
+    </div>
+
+    <div id="start-screen" class="overlay">
+        <div class="glass-panel">
+            <h1>👾 Snack Goblin</h1>
+            <p class="subtitle">Drag to move! Collect snacks, dodge veggies.</p>
+            <div class="legend">
+                <span>🍪 🥤 🍟 🍰 = <b>+10 pts</b></span>
+                <span>🥦 🌶️ 🥕 = <b>-1 Life</b></span>
+                <span>🛡️ = <b>Shield</b></span>
+            </div>
+            <div id="high-score-display">Best: 0</div>
+            <button id="start-btn" class="btn-primary">START MUNCHING</button>
+            <div id="leaderboard-preview" class="leaderboard"></div>
+        </div> <!-- FIXED: Was previously <div. -->
+    </div>
+
+    <div id="name-input-screen" class="overlay" style="display: none;">
+        <div class="glass-panel">
+            <h1>🏆 NEW HIGH SCORE!</h1>
+            <p class="subtitle">You scored <span id="new-high-score" class="highlight">0</span> points!</p>
+            <input type="text" id="player-name" placeholder="Enter your name" maxlength="10" autocomplete="off">
+            <button id="save-score-btn" class="btn-primary">SAVE SCORE</button>
+        </div>
+    </div>
+
+    <div id="game-over-screen" class="overlay" style="display: none;">
+        <div class="glass-panel">
+            <h1>GAME OVER</h1>
+            <p class="subtitle">Final Score: <span id="final-score" class="highlight">0</span></p>
+            <div id="final-leaderboard" class="leaderboard"></div>
+            <button id="restart-btn" class="btn-primary">TRY AGAIN</button>
+        </div>
+    </div>
+
+    <canvas id="gameCanvas"></canvas>
+    <script src="game.js"></script>
+</body>
+</html>

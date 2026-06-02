@@ -1,0 +1,199 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    touch-action: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    background-color: #1a1a2e;
+    overflow: hidden;
+    font-family: 'Nunito', sans-serif;
+    color: white;
+    height: 100vh;
+    width: 100vw;
+}
+
+/* Animated Retro Grid Background */
+.background-grid {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    z-index: 0;
+    animation: gridMove 20s linear infinite;
+}
+
+@keyframes gridMove {
+    0% { background-position: 0 0; }
+    100% { background-position: 40px 40px; }
+}
+
+canvas {
+    display: block;
+    position: relative;
+    z-index: 1;
+    background: radial-gradient(circle at center, #2d3436 0%, #1a1a2e 100%);
+    transition: filter 0.1s;
+}
+
+.shake {
+    animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+@keyframes shake {
+    10%, 90% { transform: translate3d(-2px, 0, 0); }
+    20%, 80% { transform: translate3d(4px, 0, 0); }
+    30%, 50%, 70% { transform: translate3d(-6px, 0, 0); }
+    40%, 60% { transform: translate3d(6px, 0, 0); }
+}
+
+#ui-layer {
+    position: absolute;
+    top: 15px;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 25px;
+    font-family: 'Fredoka One', cursive;
+    font-size: 28px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    pointer-events: none;
+    z-index: 10;
+}
+
+.overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 20;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.glass-panel {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 24px;
+    padding: 30px 25px;
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+h1 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 36px;
+    color: #f1c40f;
+    text-shadow: 3px 3px 0 #d35400;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    font-size: 16px;
+    color: #dfe6e9;
+    margin-bottom: 20px;
+    line-height: 1.4;
+}
+
+.legend {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 18px;
+    margin-bottom: 20px;
+    color: #fff;
+}
+
+.legend b { color: #2ecc71; }
+
+.highlight {
+    color: #f1c40f;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.2em;
+}
+
+input {
+    width: 100%;
+    padding: 15px;
+    font-size: 20px;
+    font-family: 'Fredoka One', cursive;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-radius: 12px;
+    text-align: center;
+    margin: 15px 0;
+    outline: none;
+    background: rgba(0,0,0,0.3);
+    color: white;
+    transition: border-color 0.2s;
+}
+
+input:focus {
+    border-color: #f1c40f;
+}
+
+.btn-primary {
+    width: 100%;
+    padding: 16px;
+    font-size: 22px;
+    font-family: 'Fredoka One', cursive;
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+    color: white;
+    border: none;
+    border-radius: 16px;
+    cursor: pointer;
+    box-shadow: 0 6px 0 #1e8449, 0 10px 10px rgba(0,0,0,0.2);
+    transition: transform 0.1s, box-shadow 0.1s;
+    margin-top: 10px;
+}
+
+.btn-primary:active {
+    transform: translateY(4px);
+    box-shadow: 0 2px 0 #1e8449, 0 4px 4px rgba(0,0,0,0.2);
+}
+
+.leaderboard {
+    margin-top: 25px;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 15px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.leaderboard h3 {
+    color: #f1c40f;
+    margin-bottom: 12px;
+    font-size: 18px;
+    font-family: 'Fredoka One', cursive;
+    letter-spacing: 1px;
+}
+
+.lb-entry {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    font-size: 18px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    font-family: 'Fredoka One', cursive;
+}
+
+.lb-entry:last-child { border-bottom: none; }
+.lb-rank { color: #f1c40f; width: 30px; text-align: left; }
+.lb-name { flex-grow: 1; text-align: left; padding-left: 10px; color: #ecf0f1; }
+.lb-score { color: #2ecc71; }
+
+#high-score-display {
+    font-size: 20px;
+    color: #f1c40f;
+    margin: 15px 0;
+    font-family: 'Fredoka One', cursive;
+}
