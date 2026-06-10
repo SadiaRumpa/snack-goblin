@@ -4,26 +4,59 @@
 //                Floating score text, Screen flash, Difficulty tiers
 // ═══════════════════════════════════════════════════════════════
 
-// Add these to your UI refs:
+// UI refs:
 const exitScreen      = document.getElementById('exit-screen');
 const jokeTextEl      = document.getElementById('joke-text');
 
-// Add this array of jokes right below your UI refs:
+// Array of jokes:
 const jokes = [
-    "Why did the goblin refuse to eat the broccoli? Because he only had a stomach for junk food! 🍔",
-    "What do you call a goblin who loves math? A mathemagoblin! 🧮",
-    "Why don't skeletons fight each other? They don't have the guts! 💀",
-    "How do you organize a space party? You planet! 🪐",
-    "What did the cookie say to the goblin? You're one smart cookie! 🍪",
-    "Why did the gamer go to the doctor? Because they had a virus! 🦠",
-    "What’s a goblin’s favorite type of music? Wrap music! 🎁",
-    "Why did the coffee file a police report? It got mugged! ☕",
-    "What do you call a fake noodle? An impasta! 🍝",
-    "I told my computer I needed a break, and now it won’t stop sending me Kit-Kat ads. 🍫",
-    "Why was the math book sad? Because it had too many problems. 📚",
+    // 🍔 FOOD JOKES
+    "Why did the cookie go to the hospital? Because it felt crummy! 🍪",
+    "What do you call cheese that isn't yours? Nacho cheese! 🧀",
+    "Why did the tomato turn red? Because it saw the salad dressing! 🍅",
+    "Why do melons have weddings? Because they cantaloupe! 🍈",
+    "What did the grape say when it got stepped on? Nothing, it just let out a little wine! 🍇",
+    "Why did the banana go to the doctor? Because it wasn't peeling well! 🍌",
     "What do you call a bear with no teeth? A gummy bear! 🐻",
     "Why did the mushroom go to the party? Because he was a fungi! 🍄",
-    "What do you call a sleeping dinosaur? A dino-snore! 🦖"
+    "What do you call a fake noodle? An impasta! 🍝",
+    "Why did the coffee file a police report? It got mugged! ☕",
+    "Why did the golfer bring two pairs of pants? In case he got a hole in one! ⛳",
+
+    // 👾 GOBLIN & MONSTER JOKES
+    "Why did the goblin refuse to eat the broccoli? Because he only had a stomach for junk food! 🥦",
+    "What do you call a goblin who loves math? A mathemagoblin! 🧮",
+    "What’s a goblin’s favorite type of music? Wrap music! 🎁",
+    "Why don't skeletons fight each other? They don't have the guts! 💀",
+    "What do you call a sleeping dinosaur? A dino-snore! 🦖",
+    "Why did the monster eat his homework? Because his teacher told him it was a piece of cake! 🍰",
+    "What do you call a ghost's true love? A ghoul-friend! 👻",
+    "Why are ghosts bad liars? Because you can see right through them! 👻",
+    "How do goblins travel? By goblin-mobile! 🚗",
+
+    // 💻 TECH & CYBER SECURITY JOKES (Just for you!)
+    "Why do programmers prefer dark mode? Because light attracts bugs! 🐛",
+    "How do you comfort a JavaScript bug? You console it! 💻",
+    "Why do cyber security experts make great gamers? Because they always block the bad packets! 🛡️",
+    "There are 10 types of people in the world: those who understand binary, and those who don't. 🔢",
+    "Why did the developer go broke? Because he used up all his cache! 💸",
+    "Why was the computer cold? It left its Windows open! 🪟",
+    "How do robots eat guacamole? With micro-chips! 🤖",
+    "Why did the Wi-Fi and the internet break up? Because there was no connection! 📶",
+    "What's a hacker's favorite season? Phishing season! 🎣",
+    "Why don't hackers ever get lost? Because they always follow the right bytes! 🗺️",
+
+    // 🎲 RANDOM & SILLY JOKES
+    "I told my computer I needed a break, and now it won’t stop sending me Kit-Kat ads. 🍫",
+    "What do you call a magic dog? A Labracadabrador! 🐕",
+    "Why did the scarecrow win an award? Because he was outstanding in his field! 🌾",
+    "What do you call a factory that makes okay products? A satisfactory! 🏭",
+    "Why was the math book sad? Because it had too many problems. 📚",
+    "What do you call a pile of cats? A meowtain! 🐈",
+    "What do you call a fish without eyes? A fsh! 🐟",
+    "Why can't you give Elsa a balloon? Because she will let it go! 🎈",
+    "What did the ocean say to the beach? Nothing, it just waved! 🌊",
+    "I'm reading a book about anti-gravity. It's impossible to put down! 📖"
 ];
 
 const canvas = document.getElementById('gameCanvas');
@@ -165,7 +198,6 @@ const firebaseConfig = {
   appId: "1:142678656082:web:1138270d15d03494cfcb8b",
   measurementId: "G-60PKZYJH6B"
 };
-
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
