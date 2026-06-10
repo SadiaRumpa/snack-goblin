@@ -31,9 +31,18 @@
                 <span>⚡ = <b>Speed Burst</b></span>
                 <span>⭐ = <b>2x Score</b></span>
             </div>
-            <div id="high-score-display">Best: 0</div>
-            <button id="start-btn" class="btn-primary" type="button">START MUNCHING</button>
-            <div id="leaderboard-preview" class="leaderboard"></div>
+            <div id="high-score-display">Global Best: 0</div>
+            <button id="start-btn" class="btn-primary">START MUNCHING</button>
+            <button id="view-leaderboard-btn" class="btn-secondary">🏆 VIEW LEADERBOARD</button>
+        </div>
+    </div>
+
+    <!-- Leaderboard Modal (New) -->
+    <div id="leaderboard-modal" class="overlay" style="display: none;">
+        <div class="glass-panel">
+            <h1>🌍 GLOBAL TOP 10</h1>
+            <div id="modal-leaderboard" class="leaderboard"></div>
+            <button id="close-leaderboard-btn" class="btn-primary">BACK</button>
         </div>
     </div>
 

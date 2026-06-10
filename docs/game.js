@@ -179,12 +179,12 @@ async function saveHighScore(name, score) {
 
 async function renderLeaderboard() {
     const loadingHtml = '<div class="lb-loading">Loading global scores…</div>';
-    document.getElementById('leaderboard-preview').innerHTML = loadingHtml;
+    // Update both the modal and the game over screen
+    document.getElementById('modal-leaderboard').innerHTML = loadingHtml;
     document.getElementById('final-leaderboard').innerHTML   = loadingHtml;
 
     const scores = await getHighScores();
-    const header = `<h3>🌍 GLOBAL TOP 10</h3>`;
-
+    
     const rows = scores.map((s, i) => `
         <div class="lb-entry">
             <span class="lb-rank">#${i + 1}</span>
@@ -197,10 +197,10 @@ async function renderLeaderboard() {
         '<div class="lb-entry"><span class="lb-rank">-</span><span class="lb-name">---</span><span class="lb-score">0</span></div>'
     ).join('');
 
-    const full = header + rows + empty;
+    const fullHtml = `<h3>🌍 GLOBAL TOP 10</h3>` + rows + empty;
 
-    document.getElementById('leaderboard-preview').innerHTML = scores.length ? full : '';
-    document.getElementById('final-leaderboard').innerHTML = full;
+    document.getElementById('modal-leaderboard').innerHTML = fullHtml;
+    document.getElementById('final-leaderboard').innerHTML = fullHtml;
 
     if (scores.length > 0) {
         document.getElementById('high-score-display').innerText = `Global Best: ${scores[0].score}`;
@@ -735,6 +735,18 @@ async function endGame() {
 // ═══════════════════════════════════════════════════════════════
 document.getElementById('start-btn').addEventListener('click', startGame);
 document.getElementById('restart-btn').addEventListener('click', startGame);
+
+
+// NEW: View Leaderboard Button
+document.getElementById('view-leaderboard-btn').addEventListener('click', async () => {
+    await renderLeaderboard();
+    document.getElementById('leaderboard-modal').style.display = 'flex';
+});
+
+// NEW: Close Leaderboard Button
+document.getElementById('close-leaderboard-btn').addEventListener('click', () => {
+    document.getElementById('leaderboard-modal').style.display = 'none';
+});
 
 document.getElementById('save-score-btn').addEventListener('click', async () => {
     const name = playerNameInput.value.trim() || 'Anonymous';

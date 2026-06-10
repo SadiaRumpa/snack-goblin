@@ -302,3 +302,26 @@ input::placeholder { color: rgba(255,255,255,0.4); }
     transform: translateX(-50%) scale(1);
     opacity: 1;
 }
+
+/* ── Secondary Button (for Leaderboard) ── */
+.btn-secondary {
+    width: 100%;
+    padding: 14px;
+    font-size: 18px;
+    font-family: 'Fredoka One', cursive;
+    background: rgba(255, 255, 255, 0.08);
+    color: #f1c40f;
+    border: 2px solid rgba(241, 196, 15, 0.3);
+    border-radius: 16px;
+    cursor: pointer;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.2);
+    transition: transform 0.1s, background 0.2s;
+    margin-top: 12px;
+    letter-spacing: 0.5px;
+}
+
+.btn-secondary:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 rgba(0,0,0,0.2);
+    background: rgba(241, 196, 15, 0.15);
+}
