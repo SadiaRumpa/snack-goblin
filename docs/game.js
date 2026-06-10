@@ -4,6 +4,28 @@
 //                Floating score text, Screen flash, Difficulty tiers
 // ═══════════════════════════════════════════════════════════════
 
+// Add these to your UI refs:
+const exitScreen      = document.getElementById('exit-screen');
+const jokeTextEl      = document.getElementById('joke-text');
+
+// Add this array of jokes right below your UI refs:
+const jokes = [
+    "Why did the goblin refuse to eat the broccoli? Because he only had a stomach for junk food! 🍔",
+    "What do you call a goblin who loves math? A mathemagoblin! 🧮",
+    "Why don't skeletons fight each other? They don't have the guts! 💀",
+    "How do you organize a space party? You planet! 🪐",
+    "What did the cookie say to the goblin? You're one smart cookie! 🍪",
+    "Why did the gamer go to the doctor? Because they had a virus! 🦠",
+    "What’s a goblin’s favorite type of music? Wrap music! 🎁",
+    "Why did the coffee file a police report? It got mugged! ☕",
+    "What do you call a fake noodle? An impasta! 🍝",
+    "I told my computer I needed a break, and now it won’t stop sending me Kit-Kat ads. 🍫",
+    "Why was the math book sad? Because it had too many problems. 📚",
+    "What do you call a bear with no teeth? A gummy bear! 🐻",
+    "Why did the mushroom go to the party? Because he was a fungi! 🍄",
+    "What do you call a sleeping dinosaur? A dino-snore! 🦖"
+];
+
 const canvas = document.getElementById('gameCanvas');
 const ctx    = canvas.getContext('2d');
 
@@ -735,7 +757,9 @@ async function endGame() {
 // ═══════════════════════════════════════════════════════════════
 document.getElementById('start-btn').addEventListener('click', startGame);
 document.getElementById('restart-btn').addEventListener('click', startGame);
-
+// Add these right below your existing event listeners:
+document.getElementById('exit-btn').addEventListener('click', showExitScreen);
+document.getElementById('back-to-menu-btn').addEventListener('click', backToMenu);
 
 // NEW: View Leaderboard Button
 document.getElementById('view-leaderboard-btn').addEventListener('click', async () => {
@@ -765,5 +789,25 @@ playerNameInput.addEventListener('keydown', (e) => {
 // ═══════════════════════════════════════════════════════════════
 //  INIT
 // ═══════════════════════════════════════════════════════════════
+
+function showExitScreen() {
+    // Pick a random joke
+    const randomIndex = Math.floor(Math.random() * jokes.length);
+    jokeTextEl.innerText = `"${jokes[randomIndex]}"`;
+    
+    // Hide Game Over, Show Exit Screen
+    gameOverScreen.style.display = 'none';
+    exitScreen.style.display = 'flex';
+}
+
+function backToMenu() {
+    // Hide Exit Screen, Show Start Screen
+    exitScreen.style.display = 'none';
+    startScreen.style.display = 'flex';
+    
+    // Refresh the leaderboard just in case
+    renderLeaderboard();
+}
+
 renderLeaderboard();
 loop();

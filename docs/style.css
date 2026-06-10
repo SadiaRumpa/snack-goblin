@@ -325,3 +325,42 @@ input::placeholder { color: rgba(255,255,255,0.4); }
     box-shadow: 0 1px 0 rgba(0,0,0,0.2);
     background: rgba(241, 196, 15, 0.15);
 }
+
+/* ── Exit Button (Red/Orange theme) ── */
+.btn-exit {
+    width: 100%;
+    padding: 14px;
+    font-size: 18px;
+    font-family: 'Fredoka One', cursive;
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: white;
+    border: none;
+    border-radius: 16px;
+    cursor: pointer;
+    box-shadow: 0 5px 0 #922b21, 0 8px 15px rgba(0,0,0,0.2);
+    transition: transform 0.1s, box-shadow 0.1s;
+    margin-top: 12px;
+    letter-spacing: 0.5px;
+}
+
+.btn-exit:active {
+    transform: translateY(4px);
+    box-shadow: 0 1px 0 #922b21, 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* ── Joke Text Styling ── */
+.joke-text {
+    font-size: 20px;
+    font-style: italic;
+    color: #ffffff;
+    background: rgba(0, 0, 0, 0.3);
+    border-left: 4px solid #f1c40f;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+    line-height: 1.5;
+    text-align: left;
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+}
