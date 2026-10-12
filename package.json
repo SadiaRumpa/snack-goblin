@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "main": "game.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "sync": "cap sync",
+    "copy": "cap copy",
+    "ios": "cap open ios",
+    "android": "cap open android"
   },
   "keywords": [],
   "author": "",
@@ -13,6 +16,14 @@
     "@capacitor/android": "^8.4.0",
     "@capacitor/cli": "^7.6.6",
     "@capacitor/core": "^8.4.0",
-    "@capacitor/ios": "^8.4.0"
+    "@capacitor/haptics": "^8.0.2",
+    "@capacitor/ios": "^8.4.0",
+    "@capacitor/screen-orientation": "^8.0.2",
+    "@capacitor/share": "^8.0.3",
+    "@capacitor/splash-screen": "^8.0.2",
+    "@capacitor/status-bar": "^8.0.4"
+  },
+  "devDependencies": {
+    "sharp": "^0.35.5"
   }
 }

@@ -2,85 +2,346 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#1a1a2e">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Snack Goblin</title>
+    <meta name="apple-mobile-web-app-title" content="Snack Goblin">
+    <meta name="description" content="Snack Goblin: Munch tasty junk food, dodge healthy veggies, collect coins, unlock epic goblin skins, and dominate the global leaderboard!">
+    <title>Snack Goblin - Arcade Muncher</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="assets/icon.png">
+    <link rel="apple-touch-icon" href="assets/icon.png">
+    
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="background-grid"></div>
     <div id="flash-overlay"></div>
+    <canvas id="gameCanvas"></canvas>
 
+    <!-- In-Game HUD -->
     <div id="ui-layer">
-        <div id="score-display">0</div>
-        <div id="combo-display" style="display:none;"></div>
-        <div id="lives-display">❤️❤️❤️</div>
-    </div>
-
-    <!-- Start Screen -->
-    <div id="start-screen" class="overlay">
-        <div class="glass-panel">
-            <h1>👾 Snack Goblin</h1>
-            <p class="subtitle">Drag to move! Collect snacks, dodge veggies.</p>
-            <div class="legend">
-                <span>🍪 🥤 🍟 🍰 = <b>+10 pts</b></span>
-                <span>🥦 🌶️ 🥕 = <b>-1 Life</b></span>
-                <span>🛡️ = <b>Shield</b></span>
-                <span>⚡ = <b>Speed Burst</b></span>
-                <span>⭐ = <b>2x Score</b></span>
+        <!-- Top Left: Score & Coins -->
+        <div class="hud-left">
+            <div id="score-card" class="hud-pill">
+                <span class="hud-label">SCORE</span>
+                <span id="score-display">0</span>
             </div>
-            <div id="high-score-display">Global Best: 0</div>
-            <button id="start-btn" class="btn-primary">START MUNCHING</button>
-            <button id="view-leaderboard-btn" class="btn-secondary">🏆 VIEW LEADERBOARD</button>
+            <div id="coins-card" class="hud-pill">
+                <span class="coin-icon">🪙</span>
+                <span id="coins-display">0</span>
+            </div>
+        </div>
+
+        <!-- Top Center: Combo & Fever Progress -->
+        <div class="hud-center">
+            <div id="combo-container" style="display: none;">
+                <div id="combo-display">3× COMBO!</div>
+                <div id="combo-meter">
+                    <div id="combo-meter-fill"></div>
+                </div>
+            </div>
+            <div id="fever-meter-container">
+                <div class="fever-label">FEVER METER</div>
+                <div id="fever-meter-bar">
+                    <div id="fever-meter-fill"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Right: Lives & Pause -->
+        <div class="hud-right">
+            <div id="lives-display" class="hud-pill">❤️❤️❤️</div>
+            <button id="pause-btn" class="hud-btn" aria-label="Pause Game">⏸️</button>
         </div>
     </div>
 
-    <!-- Leaderboard Modal (New) -->
+    <!-- Active Power-ups Bar -->
+    <div id="powerups-dock"></div>
+
+    <!-- Floating Achievement Toast -->
+    <div id="toast-container"></div>
+
+    <!-- START SCREEN -->
+    <div id="start-screen" class="overlay">
+        <div class="glass-panel main-menu-panel">
+            <div class="brand-header">
+                <div class="mascot-avatar" id="menu-mascot-preview">
+                    <span class="mascot-emoji" id="mascot-avatar-emoji">👾</span>
+                </div>
+                <h1 class="game-title">Snack Goblin</h1>
+                <p class="tagline">Munch the junk, dodge the veggies!</p>
+            </div>
+
+            <!-- Stats Bar -->
+            <div class="menu-stats-bar">
+                <div class="stat-box">
+                    <span class="stat-title">🏆 BEST</span>
+                    <span id="menu-high-score" class="stat-value">0</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-title">🪙 COINS</span>
+                    <span id="menu-coins" class="stat-value">0</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-title">👕 SKIN</span>
+                    <span id="menu-skin-name" class="stat-value">Munchy</span>
+                </div>
+            </div>
+
+            <button id="start-btn" class="btn-primary pulse-btn">
+                <span>START MUNCHING</span>
+                <span class="btn-sub">Tap or Drag to Play</span>
+            </button>
+
+            <!-- Navigation Grid -->
+            <div class="menu-grid">
+                <button id="open-wardrobe-btn" class="btn-menu">
+                    <span class="btn-icon">👕</span>
+                    <span>Wardrobe</span>
+                </button>
+                <button id="open-achievements-btn" class="btn-menu">
+                    <span class="btn-icon">🏅</span>
+                    <span>Badges</span>
+                </button>
+                <button id="view-leaderboard-btn" class="btn-menu">
+                    <span class="btn-icon">🌍</span>
+                    <span>Top 10</span>
+                </button>
+                <button id="open-settings-btn" class="btn-menu">
+                    <span class="btn-icon">⚙️</span>
+                    <span>Settings</span>
+                </button>
+            </div>
+
+            <button id="open-how-to-play-btn" class="btn-text">❓ How to Play & Power-ups</button>
+        </div>
+    </div>
+
+    <!-- WARDROBE / SKINS SHOP MODAL -->
+    <div id="wardrobe-modal" class="overlay" style="display: none;">
+        <div class="glass-panel wardrobe-panel">
+            <div class="modal-header">
+                <h2>👕 GOBLIN WARDROBE</h2>
+                <div class="wallet-badge">🪙 <span id="wardrobe-coins-display">0</span></div>
+            </div>
+            <p class="modal-sub">Choose your goblin style or unlock new looks with coins!</p>
+            
+            <div id="skins-grid" class="skins-grid">
+                <!-- Dynamically generated skin cards -->
+            </div>
+
+            <button id="close-wardrobe-btn" class="btn-primary">BACK TO MENU</button>
+        </div>
+    </div>
+
+    <!-- ACHIEVEMENTS MODAL -->
+    <div id="achievements-modal" class="overlay" style="display: none;">
+        <div class="glass-panel modal-panel">
+            <div class="modal-header">
+                <h2>🏅 ACHIEVEMENTS</h2>
+                <div class="badge-count"><span id="completed-achievements-count">0</span> / <span id="total-achievements-count">8</span></div>
+            </div>
+            <div id="achievements-list" class="achievements-list">
+                <!-- Dynamically rendered achievements -->
+            </div>
+            <button id="close-achievements-btn" class="btn-primary">BACK</button>
+        </div>
+    </div>
+
+    <!-- LEADERBOARD MODAL -->
     <div id="leaderboard-modal" class="overlay" style="display: none;">
-        <div class="glass-panel">
-            <h1>🌍 GLOBAL TOP 10</h1>
-            <div id="modal-leaderboard" class="leaderboard"></div>
+        <div class="glass-panel modal-panel">
+            <div class="modal-header">
+                <h2>🌍 GLOBAL TOP 10</h2>
+                <button id="refresh-leaderboard-btn" class="icon-refresh" aria-label="Refresh">🔄</button>
+            </div>
+            <div id="modal-leaderboard" class="leaderboard">
+                <div class="lb-loading">Connecting to global servers…</div>
+            </div>
             <button id="close-leaderboard-btn" class="btn-primary">BACK</button>
         </div>
     </div>
 
-    <!-- Name Input Screen -->
+    <!-- SETTINGS MODAL -->
+    <div id="settings-modal" class="overlay" style="display: none;">
+        <div class="glass-panel modal-panel">
+            <h2>⚙️ GAME SETTINGS</h2>
+            <div class="settings-list">
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <span class="setting-title">🔊 Sound Effects</span>
+                        <span class="setting-desc">Crunches, chimes, and power-up fanfares</span>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="setting-sfx" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <span class="setting-title">🎵 Arcade BGM</span>
+                        <span class="setting-desc">Upbeat retro chiptune background music</span>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="setting-music" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <span class="setting-title">📳 Haptic Vibrations</span>
+                        <span class="setting-desc">Tactile mobile vibration feedback</span>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="setting-haptics" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="settings-actions">
+                <button id="open-privacy-btn" class="btn-secondary">📜 Privacy Policy & Legal</button>
+                <button id="reset-data-btn" class="btn-danger-outline">⚠️ Reset Save Data</button>
+            </div>
+
+            <div class="app-version-tag">Snack Goblin v1.2.0 • Store Edition</div>
+            <button id="close-settings-btn" class="btn-primary">SAVE & CLOSE</button>
+        </div>
+    </div>
+
+    <!-- HOW TO PLAY MODAL -->
+    <div id="how-to-play-modal" class="overlay" style="display: none;">
+        <div class="glass-panel modal-panel">
+            <h2>❓ HOW TO PLAY</h2>
+            <div class="how-to-play-content">
+                <div class="legend-card">
+                    <h4>🎮 CONTROLS</h4>
+                    <p>• <b>Mobile:</b> Drag left and right with your finger.</p>
+                    <p>• <b>Desktop:</b> Move mouse or use Left / Right Arrow keys (A / D).</p>
+                </div>
+                <div class="legend-card">
+                    <h4>🍔 SNACKS (+10 PTS)</h4>
+                    <p>🍪 🥤 🍟 🍰 🍩 🌮 🍕 — Catch these to score and build your <b>Combo Multiplier</b>!</p>
+                </div>
+                <div class="legend-card danger-card">
+                    <h4>🥦 VEGGIES (-1 LIFE)</h4>
+                    <p>🥦 🌶️ 🥕 🥒 🧅 — Dodge healthy greens or lose a heart!</p>
+                </div>
+                <div class="legend-card power-card">
+                    <h4>✨ POWER-UPS & REWARDS</h4>
+                    <p>🛡️ <b>Shield:</b> Absorbs one veggie hit safely.</p>
+                    <p>⭐ <b>2× Score:</b> Doubles all points for 6 seconds.</p>
+                    <p>🧲 <b>Snack Magnet:</b> Vacuums snacks right to your mouth!</p>
+                    <p>❄️ <b>Freeze:</b> Freezes and shatters veggies.</p>
+                    <p>🌶️ <b>FEVER MODE:</b> Fill your meter to grow giant & eat veggies for +50 pts!</p>
+                    <p>🪙 <b>Snack Coins:</b> Spend in Wardrobe for cool skins!</p>
+                </div>
+            </div>
+            <button id="close-how-to-play-btn" class="btn-primary">LET'S MUNCH!</button>
+        </div>
+    </div>
+
+    <!-- PRIVACY POLICY MODAL -->
+    <div id="privacy-modal" class="overlay" style="display: none;">
+        <div class="glass-panel modal-panel">
+            <h2>📜 PRIVACY POLICY</h2>
+            <div class="privacy-content">
+                <p><b>Snack Goblin</b> is designed with player privacy as our top priority. We comply with Apple App Store and Google Play privacy requirements:</p>
+                <p>• <b>Personal Data:</b> We do not collect names, email addresses, location, or private identifiers.</p>
+                <p>• <b>Local Storage:</b> High scores, coins, unlocked skins, and settings are stored locally on your device.</p>
+                <p>• <b>Leaderboard:</b> The optional Global Leaderboard stores only your chosen nickname and score in Google Firebase Firestore.</p>
+                <p>• <b>Children's Privacy:</b> Snack Goblin is family friendly and COPPA compliant.</p>
+            </div>
+            <button id="close-privacy-btn" class="btn-primary">OK</button>
+        </div>
+    </div>
+
+    <!-- PAUSE MODAL -->
+    <div id="pause-modal" class="overlay" style="display: none;">
+        <div class="glass-panel pause-panel">
+            <h2>GAME PAUSED ⏸️</h2>
+            <p class="subtitle">Take a breather, goblin!</p>
+            <div class="pause-stats">
+                <div>Current Score: <b id="pause-score">0</b></div>
+                <div>Coins: <b id="pause-coins">0</b></div>
+            </div>
+            <button id="resume-btn" class="btn-primary">▶️ RESUME</button>
+            <button id="pause-restart-btn" class="btn-secondary">🔄 RESTART</button>
+            <button id="pause-settings-btn" class="btn-secondary">⚙️ SETTINGS</button>
+            <button id="pause-menu-btn" class="btn-secondary">🏠 MAIN MENU</button>
+        </div>
+    </div>
+
+    <!-- NEW HIGH SCORE NAME INPUT -->
     <div id="name-input-screen" class="overlay" style="display: none;">
-        <div class="glass-panel">
-            <h1>🏆 NEW HIGH SCORE!</h1>
+        <div class="glass-panel celebration-panel">
+            <div class="crown-icon">👑</div>
+            <h1 class="golden-title">NEW HIGH SCORE!</h1>
             <p class="subtitle">You scored <span id="new-high-score" class="highlight">0</span> points!</p>
-            <input type="text" id="player-name" placeholder="Enter your name" maxlength="12" autocomplete="off" autocorrect="off" spellcheck="false">
-            <button id="save-score-btn" class="btn-primary" type="button">SAVE SCORE</button>
+            <p class="hint-text">Enter your nickname for the Global Top 10:</p>
+            <input type="text" id="player-name" placeholder="Your Goblin Name" maxlength="12" autocomplete="off" autocorrect="off" spellcheck="false">
+            <button id="save-score-btn" class="btn-primary" type="button">SUBMIT SCORE 🚀</button>
         </div>
     </div>
 
-    <!-- Game Over Screen -->
+    <!-- GAME OVER SCREEN -->
     <div id="game-over-screen" class="overlay" style="display: none;">
-        <div class="glass-panel">
-            <h1>GAME OVER 💀</h1>
-            <p class="subtitle">Final Score: <span id="final-score" class="highlight">0</span></p>
-            <div id="final-leaderboard" class="leaderboard"></div>
-            <button id="restart-btn" class="btn-primary" type="button">TRY AGAIN</button>
-            <button id="exit-btn" class="btn-exit">🚪 EXIT GAME</button>
+        <div class="glass-panel game-over-panel">
+            <h1 class="game-over-title">GAME OVER 💀</h1>
+            
+            <div class="score-summary-card">
+                <div class="summary-score-box">
+                    <span class="summary-label">FINAL SCORE</span>
+                    <span id="final-score" class="summary-score-value">0</span>
+                </div>
+                <div class="summary-coin-box">
+                    <span class="summary-label">ROUND COINS</span>
+                    <span id="round-coins" class="summary-coin-value">+0 🪙</span>
+                </div>
+            </div>
+
+            <div id="new-best-badge" class="new-best-badge" style="display: none;">🎉 NEW PERSONAL BEST! 🎉</div>
+
+            <!-- DIRECT JOKE ON GAME OVER -->
+            <div class="game-over-joke-card">
+                <div class="joke-header">
+                    <span class="joke-header-title">😂 GOBLIN JOKE</span>
+                    <button id="next-joke-btn" class="joke-refresh-btn" type="button" aria-label="Another Joke">🔄 Another</button>
+                </div>
+                <p class="joke-text" id="game-over-joke-text">Loading a funny joke...</p>
+            </div>
+
+            <div id="final-leaderboard" class="leaderboard mini-leaderboard"></div>
+
+            <div class="game-over-actions">
+                <button id="restart-btn" class="btn-primary pulse-btn" type="button">PLAY AGAIN 🎮</button>
+                <button id="home-btn" class="btn-secondary" type="button">🏠 HOME PAGE</button>
+            </div>
         </div>
     </div>
 
-        <!-- Exit Screen (Joke Modal) -->
+    <!-- EXIT SCREEN (JOKES MODAL) -->
     <div id="exit-screen" class="overlay" style="display: none;">
-        <div class="glass-panel">
+        <div class="glass-panel joke-panel">
             <h1>👋 SEE YA!</h1>
             <p class="joke-text" id="joke-text">Loading a joke...</p>
+            <button id="next-joke-btn" class="btn-secondary">😂 ANOTHER JOKE</button>
             <button id="back-to-menu-btn" class="btn-primary">🏠 BACK TO MENU</button>
         </div>
     </div>
 
-    <canvas id="gameCanvas"></canvas>
-
-            <!-- Firebase SDK -->
+    <!-- Firebase SDK (Gracefully handled if offline) -->
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+    <!-- Canvas Confetti Library for Celebrations -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
     <script src="game.js"></script>
 </body>

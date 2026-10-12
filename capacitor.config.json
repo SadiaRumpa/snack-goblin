@@ -2,6 +2,18 @@
   "appId": "com.sadiarumpa.snackgoblin",
   "appName": "Snack Goblin",
   "webDir": "docs",
-  "bundledWebRuntime": false
+  "bundledWebRuntime": false,
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 1200,
+      "launchAutoHide": true,
+      "backgroundColor": "#1a1a2e",
+      "showSpinner": false
+    },
+    "StatusBar": {
+      "style": "DARK",
+      "overlaysWebView": true,
+      "backgroundColor": "#1a1a2e"
+    }
+  }
 }
-
